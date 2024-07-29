@@ -20,6 +20,12 @@ async function main() {
                 message: message.value,
             });
             await new Promise(r => setTimeout(r, 1000));
+
+            await consumer.commitOffsets([{
+                topic: TOPIC_NAME,
+                partition: partition,
+                offset: (parseInt(message.offset) + 1).toString()
+            }])
         }
     })
 
