@@ -34,6 +34,7 @@ export default function () {
             }
             const response = await axios.post(BACKEND_URL + '/user/signin', objToPush)
             if (response.status == 200) {
+                localStorage.setItem('token', response.data.token);
                 router.push('/dashboard')
             } else {
                 toast({

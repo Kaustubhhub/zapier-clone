@@ -1,5 +1,7 @@
+import { Appbar } from "@/components/Appbar";
+
 export default function () {
     return <div>
-        hi from dashboards
+        <Appbar />
     </div>
 }
