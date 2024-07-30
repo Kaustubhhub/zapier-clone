@@ -33,7 +33,6 @@ export default function () {
                 password: password
             }
             const response = await axios.post(BACKEND_URL + '/user/signin', objToPush)
-            console.log('response', response);
             if (response.status == 200) {
                 router.push('/dashboard')
             } else {
@@ -42,7 +41,7 @@ export default function () {
                 })
             }
         } catch (error) {
-            console.log('error', error);
+            console.error('error', error);
         }
     }
 
