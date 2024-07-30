@@ -1,17 +1,22 @@
-"use client"
-export const Features = ({ title, subTitle }: { title: String, subTitle: String }) => {
-    return <div className="flex gap-1">
-        <CheckIcon />
-        <span className="font-bold">{title} </span>
-        <span>{subTitle}</span>
-    </div>
+"use client";
+
+import { ReactNode } from "react";
+
+interface FeaturesProps {
+    title: string;
+    subTitle?: string;
+    icon: ReactNode;
+    boldTitle?: boolean;
 }
 
-function CheckIcon() {
-    return <div className="flex justify-center items-center">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-            stroke-width="1.5" stroke="currentColor" className="size-4">
-            <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
-        </svg>
-    </div>
-}
+export const Features = ({ title, subTitle, icon, boldTitle = false }: FeaturesProps) => {
+    return (
+        <div className="flex gap-1">
+            {icon}
+            <span className={boldTitle ? "font-bold" : "font-normal"}>
+                {title}
+            </span>
+            {subTitle && <span>{subTitle}</span>}
+        </div>
+    );
+};

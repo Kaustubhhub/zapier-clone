@@ -44,8 +44,8 @@ export const Hero = () => {
             </LinkButton>
         </div>
         <div className="flex justify-center gap-3 pt-10">
-            {FEATURES.map((feat) => (
-                <Features title={ feat.title} subTitle={feat.subTitle } />
+            {FEATURES.map((feat, index) => (
+                <Features key={index} boldTitle={true} icon={<CheckIcon />} title={feat.title} subTitle={feat.subTitle} />
             ))}
         </div>
     </div>
@@ -130,3 +130,12 @@ const GoogleSvg = () => {
         </div>
     );
 };
+
+function CheckIcon() {
+    return <div className="flex justify-center items-center">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+            strokeWidth="1.5" stroke="currentColor" className="size-4">
+            <path d="m4.5 12.75 6 6 9-13.5" />
+        </svg>
+    </div>
+}
