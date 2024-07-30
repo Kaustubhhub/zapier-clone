@@ -21,12 +21,9 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const config_1 = require("../config");
 const router = (0, express_1.Router)();
 router.post('/signup', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log("hi from signup");
     const body = req.body;
-    console.log('body', body);
     const parsedData = types_1.SignUpSchema.safeParse(body);
     if (!parsedData.success) {
-        console.log('parsedData.success', parsedData.success);
         return res.status(411).json({
             message: "Incorrect inputs"
         });
@@ -41,23 +38,23 @@ router.post('/signup', (req, res) => __awaiter(void 0, void 0, void 0, function*
             message: "User already exists"
         });
     }
-    yield db_1.prismaClient.user.create({
-        data: {
-            email: parsedData.data.username,
-            password: parsedData.data.password,
-            name: parsedData.data.name
-        }
-    });
-    return res.json({
-        message: "Please verify your account by checking your email"
-    });
+    else {
+        yield db_1.prismaClient.user.create({
+            data: {
+                email: parsedData.data.username,
+                password: parsedData.data.password,
+                name: parsedData.data.name
+            }
+        });
+        return res.json({
+            message: "Please verify your account by checking your email"
+        });
+    }
 }));
 router.post('/signin', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log('Signin handler');
     const body = req.body;
     const parsedData = types_1.SignInSchema.safeParse(body);
     if (!parsedData.success) {
-        console.log(parsedData.error);
         return res.status(411).json({
             message: "Incorrect inputs"
         });
@@ -69,20 +66,20 @@ router.post('/signin', (req, res) => __awaiter(void 0, void 0, void 0, function*
         }
     });
     if (!user) {
-        console.log('hii');
-        res.json({
+        res.status(401).json({
             message: "The credentials are incorrect!"
         });
     }
-    const token = jsonwebtoken_1.default.sign({
-        id: user === null || user === void 0 ? void 0 : user.id,
-    }, config_1.JWT_PASSWORD);
-    res.json({
-        token: token
-    });
+    else {
+        const token = jsonwebtoken_1.default.sign({
+            id: user === null || user === void 0 ? void 0 : user.id,
+        }, config_1.JWT_PASSWORD);
+        res.json({
+            token: token
+        });
+    }
 }));
 router.get('/', middleware_1.authMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log('User handler');
     //@ts-ignore
     const id = req.id;
     const user = yield db_1.prismaClient.user.findFirst({
