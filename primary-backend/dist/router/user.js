@@ -69,7 +69,8 @@ router.post('/signin', (req, res) => __awaiter(void 0, void 0, void 0, function*
         }
     });
     if (!user) {
-        res.status(403).json({
+        console.log('hii');
+        res.json({
             message: "The credentials are incorrect!"
         });
     }
