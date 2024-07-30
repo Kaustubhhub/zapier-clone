@@ -3,6 +3,11 @@ import { Appbar } from "@/components/Appbar";
 import { PrimaryButton } from "@/components/buttons/PrimaryButton";
 import { Features } from "@/components/Features";
 import { TextInput } from "@/components/TextInput";
+import axios from "axios";
+import { useState } from "react";
+import { BACKEND_URL } from "../config";
+import { useRouter } from "next/navigation";
+import { toast } from "@/components/ui/use-toast";
 
 const FEATURES_LIST = [
     {
@@ -17,6 +22,30 @@ const FEATURES_LIST = [
 ]
 
 export default function () {
+    const router = useRouter()
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+
+    const handleLogin = async () => {
+        try {
+            const objToPush = {
+                username: email,
+                password: password
+            }
+            const response = await axios.post(BACKEND_URL + '/user/signin', objToPush)
+            console.log('response', response);
+            if (response.status == 200) {
+                router.push('/dashboard')
+            } else {
+                toast({
+                    description: "Friday, February 10, 2023 at 5:57 PM",
+                })
+            }
+        } catch (error) {
+            console.log('error', error);
+        }
+    }
+
     return <div>
         <Appbar />
         <div className="flex justify-center pt-10 gap-4">
@@ -37,13 +66,17 @@ export default function () {
             </div>
             <div className="border flex flex-col justify-center rounded-lg p-4">
                 <div className="px-4">
-                    <TextInput placeholder="" title="Email" type="email" />
+                    <TextInput onChange={(e) => {
+                        setEmail(e.target.value)
+                    }} placeholder="" title="Email" type="email" />
                 </div>
                 <div className="px-4">
-                    <TextInput placeholder="" title="Password" type="password" />
+                    <TextInput onChange={(e) => {
+                        setPassword(e.target.value)
+                    }} placeholder="" title="Password" type="password" />
                 </div>
                 <div className="flex justify-center pt-4 px-4">
-                    <PrimaryButton type="big" onClick={() => { }}>Log in</PrimaryButton>
+                    <PrimaryButton type="big" onClick={() => { handleLogin() }}>Log in</PrimaryButton>
                 </div>
                 <div className="w-[450px] flex pt-4 px-4 pb-4">
                     <span className="text-md">By logging in, you agree to Zapier's <a className="text-blue-600 border-b border-blue-600" href="">terms of service</a> and <a className="border-b border-blue-600 text-blue-600" href="">privacy policy</a>.</span>
