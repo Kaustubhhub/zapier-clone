@@ -2,6 +2,7 @@
 
 import { BACKEND_URL } from "@/app/config";
 import { Appbar } from "@/components/Appbar";
+import { TextInput } from "@/components/TextInput";
 // import { Input } from "@/components/Input";
 import { ZapCell } from "@/components/ZapCell";
 import { LinkButton } from "@/components/buttons/LinkButton";
@@ -148,25 +149,82 @@ function Modal({ index, onSelect, availableItems }: { index: number, onSelect: (
                     </button>
                 </div>
                 <div className="p-4 md:p-5 space-y-4">
-                    {availableItems.map(({ id, name, image }) => {
-                        return <div className="flex border p-4 cursor-pointer hover:bg-slate-100"
-                            onClick={() => {
+                    {step === 1 && selectedAction?.id === "email" && <EmailSelector setMetadata={(metadata) => {
+                        onSelect({
+                            ...selectedAction,
+                            metadata
+                        })
+                    }} />}
+
+                    {(step === 1 && selectedAction?.id === "send-sol") && <SolanaSelector setMetadata={(metadata) => {
+                        onSelect({
+                            ...selectedAction,
+                            metadata
+                        })
+                    }} />}
+
+                    {step === 0 && <div>{availableItems.map(({ id, name, image }) => {
+                        return <div onClick={() => {
+                            if (isTrigger) {
                                 onSelect({
                                     id,
                                     name,
-                                    metadata:""
+                                    metadata: {}
                                 })
-                            }}
-                        >
-                            <img className="rounded-full" src={image} width={30} alt="" />
-                            <div className="flex flex-col justify-center ">
-                                {name}
-                            </div>
+                            } else {
+                                setStep(s => s + 1);
+                                setSelectedAction({
+                                    id,
+                                    name
+                                })
+                            }
+                        }} className="flex border p-4 cursor-pointer hover:bg-slate-100">
+                            <img src={image} width={30} className="rounded-full" /> <div className="flex flex-col justify-center"> {name} </div>
                         </div>
-                    })}
+                    })}</div>}
                 </div>
             </div>
         </div>
     </div>
 
+}
+
+function EmailSelector({ setMetadata }: {
+    setMetadata: (params: any) => void;
+}) {
+    const [email, setEmail] = useState("");
+    const [body, setBody] = useState("");
+
+    return <div>
+        <TextInput title={"To"} type={"text"} placeholder="To" onChange={(e) => setEmail(e.target.value)}></TextInput>
+        <TextInput title={"Body"} type={"text"} placeholder="Body" onChange={(e) => setBody(e.target.value)}></TextInput>
+        <div className="pt-2">
+            <PrimaryButton onClick={() => {
+                setMetadata({
+                    email,
+                    body
+                })
+            }}>Submit</PrimaryButton>
+        </div>
+    </div>
+}
+
+function SolanaSelector({ setMetadata }: {
+    setMetadata: (params: any) => void;
+}) {
+    const [amount, setAmount] = useState("");
+    const [address, setAddress] = useState("");
+
+    return <div>
+        <TextInput title={"To"} type={"text"} placeholder="To" onChange={(e) => setAddress(e.target.value)}></TextInput>
+        <TextInput title={"Amount"} type={"text"} placeholder="To" onChange={(e) => setAmount(e.target.value)}></TextInput>
+        <div className="pt-4">
+            <PrimaryButton onClick={() => {
+                setMetadata({
+                    amount,
+                    address
+                })
+            }}>Submit</PrimaryButton>
+        </div>
+    </div>
 }
