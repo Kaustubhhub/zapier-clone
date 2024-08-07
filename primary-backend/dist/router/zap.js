@@ -16,9 +16,12 @@ const types_1 = require("../types");
 const db_1 = require("../db");
 const router = (0, express_1.Router)();
 router.post("/", middleware_1.authMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log("hi");
     // @ts-ignore
     const id = req.id;
+    console.log('id', id);
     const body = req.body;
+    console.log('body', body);
     const parsedData = types_1.ZapCreateSchema.safeParse(body);
     if (!parsedData.success) {
         return res.status(411).json({

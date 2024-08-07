@@ -13,6 +13,6 @@ app.use('/api/v1/zap', zapRouter);
 app.use('/api/v1/trigger', triggerRouter);
 app.use('/api/v1/action', actionRouter);
 
-app.listen(3001, () => {
-    console.log(`primary backend is running on port 3001`)
+app.listen(3000, () => {
+    console.log(`primary backend is running on port 3000`)
 })

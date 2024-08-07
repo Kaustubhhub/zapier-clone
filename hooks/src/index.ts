@@ -1,12 +1,12 @@
 import express from 'express';
 import { PrismaClient } from '@prisma/client'
 const app = express();
-const PORT = 3000;
+const PORT = 3002;
 const client = new PrismaClient()
 
 app.use(express.json());
 
-app.get('/hooks/catch/:userId/:zapId', async (req, res) => {
+app.post('/hooks/catch/:userId/:zapId', async (req, res) => {
 
     const userId = req.params.userId;
     const zapId = req.params.zapId;

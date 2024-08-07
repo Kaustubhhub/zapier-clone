@@ -22,23 +22,28 @@ const config_1 = require("../config");
 const router = (0, express_1.Router)();
 router.post('/signup', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const body = req.body;
+    console.log('body', body);
     const parsedData = types_1.SignUpSchema.safeParse(body);
     if (!parsedData.success) {
+        console.log("incorrect");
         return res.status(411).json({
             message: "Incorrect inputs"
         });
     }
+    console.log("checking user");
     const userExists = yield db_1.prismaClient.user.findFirst({
         where: {
             email: parsedData.data.username
         }
     });
     if (userExists) {
+        console.log("userExists");
         return res.status(403).json({
             message: "User already exists"
         });
     }
     else {
+        console.log("doesnt userExists");
         yield db_1.prismaClient.user.create({
             data: {
                 email: parsedData.data.username,

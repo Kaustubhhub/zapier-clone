@@ -21,6 +21,7 @@ function main() {
         yield consumer.connect();
         yield consumer.subscribe({ topic: TOPIC_NAME, fromBeginning: true });
         yield consumer.run({
+            autoCommit: false,
             eachMessage: ({ topic, partition, message }) => __awaiter(this, void 0, void 0, function* () {
                 console.log({
                     partition,
@@ -28,6 +29,11 @@ function main() {
                     message: message.value,
                 });
                 yield new Promise(r => setTimeout(r, 1000));
+                yield consumer.commitOffsets([{
+                        topic: TOPIC_NAME,
+                        partition: partition,
+                        offset: (parseInt(message.offset) + 1).toString()
+                    }]);
             })
         });
     });

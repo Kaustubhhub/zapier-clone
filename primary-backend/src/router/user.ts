@@ -9,14 +9,16 @@ const router = Router();
 
 router.post('/signup', async (req, res) => {
     const body = req.body;
+    console.log('body', body);
     const parsedData = SignUpSchema.safeParse(body);
 
     if (!parsedData.success) {
+        console.log("incorrect")
         return res.status(411).json({
             message: "Incorrect inputs"
         })
     }
-
+    console.log("checking user")
     const userExists = await prismaClient.user.findFirst({
         where: {
             email: parsedData.data.username
@@ -24,10 +26,13 @@ router.post('/signup', async (req, res) => {
     });
 
     if (userExists) {
+        console.log("userExists")
+
         return res.status(403).json({
             message: "User already exists"
         })
     } else {
+        console.log("doesnt userExists")
         await prismaClient.user.create({
             data: {
                 email: parsedData.data.username,

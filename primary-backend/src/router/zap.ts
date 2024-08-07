@@ -7,9 +7,12 @@ import { prismaClient } from "../db";
 const router = Router();
 
 router.post("/", authMiddleware, async (req, res) => {
+    console.log("hi")
     // @ts-ignore
     const id: string = req.id;
+    console.log('id', id);
     const body = req.body;
+    console.log('body', body);
     const parsedData = ZapCreateSchema.safeParse(body);
 
     if (!parsedData.success) {
